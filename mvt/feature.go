@@ -548,8 +548,14 @@ func (c *cursor) encodeCmd(cmd uint32, points []tegola.Point) []uint32 {
 	g = append(g, cmd)
 
 	//	range through our points
-	for _, p := range points {
+	for i, p := range points {
 		dx, dy := c.GetDeltaPointAndUpdate(p)
+
+		// If more then two values, and no change, no need to encode the value.
+		// TODO: gdey -- need to add tests
+		if i > 1 && dx == 0 && dy == 0 {
+			continue
+		}
 		//	encode our delta point
 		g = append(g, encodeZigZag(dx), encodeZigZag(dy))
 	}
