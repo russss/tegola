@@ -211,6 +211,14 @@ func (h *GeoPackageBinaryHeader) SRSId() int32 {
 	}
 }
 
+func (h *GeoPackageBinaryHeader) SRID() int {
+	if h.isInitialized("SRSId()") {
+		return int(h.srs_id)
+	} else {
+		return -1
+	}
+}
+
 func (h *GeoPackageBinaryHeader) Envelope() []float64 {
 	if h.isInitialized("Envelope()") {
 		return h.envelope
