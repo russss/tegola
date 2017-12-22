@@ -3,7 +3,6 @@ package postgis
 import (
 	"os"
 	"reflect"
-	"strconv"
 	"testing"
 
 	"github.com/terranodo/tegola"
@@ -11,13 +10,8 @@ import (
 )
 
 func TestLayerGeomType(t *testing.T) {
-	if os.Getenv("RUN_POSTGIS_TESTS") != "yes" {
+	if os.Getenv("RUN_POSTGIS_TEST") != "yes" {
 		return
-	}
-
-	port, err := strconv.ParseInt(os.Getenv("PGPORT"), 10, 64)
-	if err != nil {
-		t.Fatalf("err parsing PGPORT: %v", err)
 	}
 
 	testcases := []struct {
@@ -27,11 +21,11 @@ func TestLayerGeomType(t *testing.T) {
 	}{
 		{
 			config: map[string]interface{}{
-				ConfigKeyHost:     os.Getenv("PGHOST"),
-				ConfigKeyPort:     port,
-				ConfigKeyDB:       os.Getenv("PGDATABASE"),
-				ConfigKeyUser:     os.Getenv("PGUSER"),
-				ConfigKeyPassword: os.Getenv("PGPASSWORD"),
+				ConfigKeyHost:     "localhost",
+				ConfigKeyPort:     int64(5432),
+				ConfigKeyDB:       "tegola",
+				ConfigKeyUser:     "postgres",
+				ConfigKeyPassword: "",
 				ConfigKeyLayers: []map[string]interface{}{
 					{
 						ConfigKeyLayerName: "land",
