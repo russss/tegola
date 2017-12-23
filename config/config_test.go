@@ -17,7 +17,8 @@ func TestParse(t *testing.T) {
 			config: `
 				[webserver]
 				hostname = "cdn.tegola.io"
-				port = ":8080"
+				port = 8080
+				bind = ":8080"
 				log_file = "/var/log/tegola/tegola.log"
 				log_format = "{{.Time}}:{{.RequestIP}} —— Tile:{{.Z}}/{{.X}}/{{.Y}}"
 
@@ -54,7 +55,8 @@ func TestParse(t *testing.T) {
 				LocationName: "",
 				Webserver: config.Webserver{
 					HostName:  "cdn.tegola.io",
-					Port:      ":8080",
+					Port:      8080,
+					Bind:      ":8080",
 					LogFile:   "/var/log/tegola/tegola.log",
 					LogFormat: "{{.Time}}:{{.RequestIP}} —— Tile:{{.Z}}/{{.X}}/{{.Y}}",
 				},
@@ -102,7 +104,8 @@ func TestParse(t *testing.T) {
 			config: `
 				[webserver]
 				hostname = "cdn.tegola.io"
-				port = ":8080"
+				port = 8080
+				bind = ":8080"
 				log_file = "/var/log/tegola/tegola.log"
 				log_format = "{{.Time}}:{{.RequestIP}} —— Tile:{{.Z}}/{{.X}}/{{.Y}}"
 
@@ -166,7 +169,8 @@ func TestParse(t *testing.T) {
 				LocationName: "",
 				Webserver: config.Webserver{
 					HostName:  "cdn.tegola.io",
-					Port:      ":8080",
+					Port:      8080,
+					Bind:      ":8080",
 					LogFile:   "/var/log/tegola/tegola.log",
 					LogFormat: "{{.Time}}:{{.RequestIP}} —— Tile:{{.Z}}/{{.X}}/{{.Y}}",
 				},
@@ -282,7 +286,8 @@ func TestValidate(t *testing.T) {
 			config: config.Config{
 				LocationName: "",
 				Webserver: config.Webserver{
-					Port:      ":8080",
+					Port:      8080,
+					Bind:      ":8080",
 					LogFile:   "/var/log/tegola/tegola.log",
 					LogFormat: "{{.Time}}:{{.RequestIP}} —— Tile:{{.Z}}/{{.X}}/{{.Y}}",
 				},
@@ -418,7 +423,8 @@ func TestValidate(t *testing.T) {
 			config: config.Config{
 				LocationName: "",
 				Webserver: config.Webserver{
-					Port:      ":8080",
+					Port:      8080,
+					Bind:      ":8080",
 					LogFile:   "/var/log/tegola/tegola.log",
 					LogFormat: "{{.Time}}:{{.RequestIP}} —— Tile:{{.Z}}/{{.X}}/{{.Y}}",
 				},

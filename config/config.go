@@ -55,7 +55,8 @@ type Config struct {
 
 type Webserver struct {
 	HostName  string `toml:"hostname"`
-	Port      string `toml:"port"`
+	Port      int    `toml:"port"`
+	Bind      string `toml:"bind"`
 	LogFile   string `toml:"log_file"`
 	LogFormat string `toml:"log_format"`
 }

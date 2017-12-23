@@ -6,8 +6,8 @@ import (
 )
 
 var (
-	serverPort      string
-	defaultHTTPPort = ":8080"
+	bindAddress        string
+	defaultBindAddress = ":8080"
 )
 
 var serverCmd = &cobra.Command{
@@ -19,8 +19,8 @@ var serverCmd = &cobra.Command{
 
 		//	check config for server port setting
 		//	if you set the port via the comand line it will override the port setting in the config
-		if serverPort == defaultHTTPPort && conf.Webserver.Port != "" {
-			serverPort = conf.Webserver.Port
+		if bindAddress == defaultBindAddress && conf.Webserver.Bind != "" {
+			bindAddress = conf.Webserver.Bind
 		}
 
 		//	set our server version
@@ -28,6 +28,6 @@ var serverCmd = &cobra.Command{
 		server.HostName = conf.Webserver.HostName
 
 		//	start our webserver
-		server.Start(serverPort)
+		server.Start(bindAddress)
 	},
 }
