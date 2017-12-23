@@ -4,6 +4,7 @@ package server
 import (
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/dimfeld/httptreemux"
@@ -22,17 +23,17 @@ var (
 	//	configurable via the tegola config.toml file (set in main.go)
 	HostName string
 	//	configurable via the tegola config.toml file (set in main.go)
-	Port string
+	Port int
 	//	reference to the version of atlas to work with
 	Atlas *atlas.Atlas
 )
 
 //	Start starts the tile server binding to the provided port
-func Start(port string) {
+func Start(bind string) {
 	Atlas = atlas.DefaultAtlas
 
 	//	notify the user the server is starting
-	log.Printf("Starting tegola server on port %v", port)
+	log.Printf("Starting tegola server on %v", bind)
 
 	r := httptreemux.New()
 	group := r.NewGroup("/")
@@ -57,7 +58,7 @@ func Start(port string) {
 	group.UsingContext().Handler("GET", "/*path", http.FileServer(assetFS()))
 
 	//	start our server
-	log.Fatal(http.ListenAndServe(port, r))
+	log.Fatal(http.ListenAndServe(bind, r))
 }
 
 //	determines the hostname:port to return based on the following hierarchy
@@ -65,14 +66,20 @@ func Start(port string) {
 //	- The request host / port if config HostName or Port is missing
 func hostName(r *http.Request) string {
 	var requestHostname string
-	var requestPort string
+	var requestPort int
+	var err error
+
 	substrs := strings.Split(r.Host, ":")
 	switch len(substrs) {
 	case 1:
 		requestHostname = substrs[0]
 	case 2:
 		requestHostname = substrs[0]
-		requestPort = substrs[1]
+		requestPort, err = strconv.Atoi(substrs[1])
+		if err != nil {
+			requestPort = 0
+			log.Printf(err.Error())
+		}
 	default:
 		log.Printf("multiple colons (':') in host string: %v", r.Host)
 	}
@@ -82,11 +89,14 @@ func hostName(r *http.Request) string {
 		retHost = requestHostname
 	}
 
-	if Port != "" && Port != "none" {
-		return retHost + Port
+	if Port > 0 {
+		return retHost + ":" + strconv.Itoa(Port)
 	}
-	if requestPort != "" && Port != "none" {
-		return retHost + ":" + requestPort
+	if Port < 0 {
+		return retHost
+	}
+	if requestPort != 0 {
+		return retHost + ":" + strconv.Itoa(requestPort)
 	}
 
 	return retHost
